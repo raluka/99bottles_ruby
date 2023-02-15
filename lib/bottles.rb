@@ -1,119 +1,63 @@
-class CountdownSong
-  attr_reader :verse_template, :max, :min
+class Bottles
+  NoMore = lambda do |verse|
+    "No more bottles of beer on the wall, " +
+      "no more bottles of beer.\n" +
+      "Go to the store and buy some more, " +
+      "99 bottles of beer on the wall.\n"
+  end
 
-  def initialize(verse_template:, max: 999999, min: 0)
-    @verse_template = verse_template
-    @max, @min = max, min
+  LastOne = lambda do |verse|
+    "1 bottle of beer on the wall, " +
+      "1 bottle of beer.\n" +
+      "Take it down and pass it around, " +
+      "no more bottles of beer on the wall.\n"
+  end
+
+  Penultimate = lambda do |verse|
+    "2 bottles of beer on the wall, " +
+      "2 bottles of beer.\n" +
+      "Take one down and pass it around, " +
+      "1 bottle of beer on the wall.\n"
+  end
+
+  Default = lambda do |verse|
+    "#{verse.number} bottles of beer on the wall, " +
+      "#{verse.number} bottles of beer.\n" +
+      "Take one down and pass it around, " +
+      "#{verse.number - 1} bottles of beer on the wall.\n"
   end
 
   def song
-    verses(max, min)
+    verses(99, 0)
   end
 
-  def verses(upper, lower)
-    upper.downto(lower).collect {|i| verse(i)}.join("\n")
+  def verses(finish, start)
+    (finish).downto(start).map {|verse_number|
+      verse(verse_number) }.join("\n")
   end
 
   def verse(number)
-    verse_template.lyrics(number)
-  end
-end
-
-
-class BottleVerse
-  def self.lyrics(number)
-    new(BottleNumber.for(number)).lyrics
+    verse_for(number).text
   end
 
-  attr_reader :bottle_number
-
-  def initialize(bottle_number)
-    @bottle_number = bottle_number
-  end
-
-  def lyrics
-    "#{bottle_number} of beer on the wall, ".capitalize +
-    "#{bottle_number} of beer.\n" +
-    "#{bottle_number.action}, " +
-    "#{bottle_number.successor} of beer on the wall.\n"
-  end
-end
-
-
-class BottleNumber
-  def self.for(number)
+  def verse_for(number)
     case number
-    when 0
-      BottleNumber0
-    when 1
-      BottleNumber1
-    when 6
-      BottleNumber6
-    else
-      BottleNumber
-    end.new(number)
+      when 0 then Verse.new(number, &NoMore)
+      when 1 then Verse.new(number, &LastOne)
+      when 2 then Verse.new(number, &Penultimate)
+      else        Verse.new(number, &Default)
+    end
   end
+end
 
+class Verse
   attr_reader :number
-  def initialize(number)
+  def initialize(number, &lyrics)
     @number = number
+    @lyrics = lyrics
   end
 
-  def to_s
-    "#{quantity} #{container}"
-  end
-
-  def quantity
-    number.to_s
-  end
-
-  def container
-    "bottles"
-  end
-
-  def action
-    "Take #{pronoun} down and pass it around"
-  end
-
-  def pronoun
-    "one"
-  end
-
-  def successor
-    BottleNumber.for(number - 1)
-  end
-end
-
-class BottleNumber0 < BottleNumber
-  def quantity
-    "no more"
-  end
-
-  def action
-    "Go to the store and buy some more"
-  end
-
-  def successor
-    BottleNumber.for(99)
-  end
-end
-
-class BottleNumber1 < BottleNumber
-  def container
-    "bottle"
-  end
-
-  def pronoun
-    "it"
-  end
-end
-
-class BottleNumber6 < BottleNumber
-  def quantity
-    "1"
-  end
-
-  def container
-    "six-pack"
+  def text
+    @lyrics.call self
   end
 end
