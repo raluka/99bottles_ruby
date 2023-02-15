@@ -1,119 +1,87 @@
-class CountdownSong
-  attr_reader :verse_template, :max, :min
-
-  def initialize(verse_template:, max: 999999, min: 0)
-    @verse_template = verse_template
-    @max, @min = max, min
-  end
-
+class Bottles
   def song
-    verses(max, min)
+    verses(99, 0)
   end
 
-  def verses(upper, lower)
-    upper.downto(lower).collect {|i| verse(i)}.join("\n")
+  def verses(bottles_at_start, bottles_at_end)
+    bottles_at_start.downto(bottles_at_end).map do |bottles|
+      verse(bottles)
+    end.join("\n")
   end
 
-  def verse(number)
-    verse_template.lyrics(number)
-  end
-end
-
-
-class BottleVerse
-  def self.lyrics(number)
-    new(BottleNumber.for(number)).lyrics
-  end
-
-  attr_reader :bottle_number
-
-  def initialize(bottle_number)
-    @bottle_number = bottle_number
-  end
-
-  def lyrics
-    "#{bottle_number} of beer on the wall, ".capitalize +
-    "#{bottle_number} of beer.\n" +
-    "#{bottle_number.action}, " +
-    "#{bottle_number.successor} of beer on the wall.\n"
+  def verse(bottles)
+    Round.new(bottles).to_s
   end
 end
 
-
-class BottleNumber
-  def self.for(number)
-    case number
-    when 0
-      BottleNumber0
-    when 1
-      BottleNumber1
-    when 6
-      BottleNumber6
-    else
-      BottleNumber
-    end.new(number)
-  end
-
-  attr_reader :number
-  def initialize(number)
-    @number = number
+class Round
+  attr_reader :bottles
+  def initialize(bottles)
+    @bottles = bottles
   end
 
   def to_s
-    "#{quantity} #{container}"
+    challenge + response
   end
 
-  def quantity
-    number.to_s
+  def challenge
+    bottles_of_beer.capitalize + " " + on_wall + ", " +
+    bottles_of_beer + ".\n"
   end
 
-  def container
-    "bottles"
+  def response
+    go_to_the_store_or_take_one_down + ", " +
+    bottles_of_beer + " " + on_wall + ".\n"
   end
 
-  def action
-    "Take #{pronoun} down and pass it around"
+  def bottles_of_beer
+    "#{anglicized_bottle_count} #{pluralized_bottle_form} of #{beer}"
   end
 
-  def pronoun
-    "one"
+  def beer
+    "beer"
   end
 
-  def successor
-    BottleNumber.for(number - 1)
-  end
-end
-
-class BottleNumber0 < BottleNumber
-  def quantity
-    "no more"
+  def on_wall
+    "on the wall"
   end
 
-  def action
+  def pluralized_bottle_form
+    last_beer? ? "bottle" : "bottles"
+  end
+
+  def anglicized_bottle_count
+    all_out? ? "no more" : bottles.to_s
+  end
+
+  def go_to_the_store_or_take_one_down
+    if all_out?
+      @bottles = 99
+      buy_new_beer
+    else
+      lyrics = drink_beer
+      @bottles -= 1
+      lyrics
+    end
+  end
+
+  def buy_new_beer
     "Go to the store and buy some more"
   end
 
-  def successor
-    BottleNumber.for(99)
-  end
-end
-
-class BottleNumber1 < BottleNumber
-  def container
-    "bottle"
+  def drink_beer
+    "Take #{it_or_one} down and pass it around"
   end
 
-  def pronoun
-    "it"
-  end
-end
-
-class BottleNumber6 < BottleNumber
-  def quantity
-    "1"
+  def it_or_one
+    last_beer? ? "it" : "one"
   end
 
-  def container
-    "six-pack"
+  def all_out?
+    bottles.zero?
+  end
+
+  def last_beer?
+    bottles == 1
   end
 end
