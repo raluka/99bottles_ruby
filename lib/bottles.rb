@@ -25,20 +25,20 @@ class Round
   end
 
   def challenge
-    bottles_of_beer.capitalize + " " + on_wall + ", " +
-    bottles_of_beer + ".\n"
+    bottles_of_beverage.capitalize + " " + on_wall + ", " +
+    bottles_of_beverage + ".\n"
   end
 
   def response
     go_to_the_store_or_take_one_down + ", " +
-    bottles_of_beer + " " + on_wall + ".\n"
+    bottles_of_beverage + " " + on_wall + ".\n"
   end
 
-  def bottles_of_beer
-    "#{anglicized_bottle_count} #{pluralized_bottle_form} of #{beer}"
+  def bottles_of_beverage
+    "#{anglicized_bottle_count} #{pluralized_bottle_form} of #{beverage}"
   end
 
-  def beer
+  def beverage
     "beer"
   end
 
@@ -47,7 +47,7 @@ class Round
   end
 
   def pluralized_bottle_form
-    last_beer? ? "bottle" : "bottles"
+    last_beverage? ? "bottle" : "bottles"
   end
 
   def anglicized_bottle_count
@@ -57,31 +57,31 @@ class Round
   def go_to_the_store_or_take_one_down
     if all_out?
       @bottles = 99
-      buy_new_beer
+      buy_new_beverage
     else
-      lyrics = drink_beer
+      lyrics = drink_beverage
       @bottles -= 1
       lyrics
     end
   end
 
-  def buy_new_beer
+  def buy_new_beverage
     "Go to the store and buy some more"
   end
 
-  def drink_beer
+  def drink_beverage
     "Take #{it_or_one} down and pass it around"
   end
 
   def it_or_one
-    last_beer? ? "it" : "one"
+    last_beverage? ? "it" : "one"
   end
 
   def all_out?
     bottles.zero?
   end
 
-  def last_beer?
+  def last_beverage?
     bottles == 1
   end
 end
