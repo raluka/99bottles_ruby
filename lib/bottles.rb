@@ -14,23 +14,31 @@ class Bottles
       "#{quantity(successor(number))} #{container(successor(number))} of beer on the wall.\n"
   end
 
-  def container(number)
-    if number == 1
-      'bottle'
-    else
-      'bottles'
-    end
-  end
-
-  def pronoun(number)
-    if number == 1
-      'it'
-    else
-      'one'
-    end
-  end
-
   def quantity(number)
+    BottleNumber.new(number).quantity
+  end
+
+  def container(number)
+    BottleNumber.new(number).container
+  end
+
+  def action(number)
+    BottleNumber.new(number).action
+  end
+
+  def successor(number)
+    BottleNumber.new(number).successor
+  end
+end
+
+class BottleNumber
+  attr_reader :number
+
+  def initialize(number)
+    @number = number
+  end
+
+  def quantity
     if number == 0
       'no more'
     else
@@ -38,15 +46,31 @@ class Bottles
     end
   end
 
-  def action(number)
-    if number == 0
-      'Go to the store and buy some more, '
+  def container
+    if number == 1
+      'bottle'
     else
-      "Take #{pronoun(number)} down and pass it around, "
+      'bottles'
     end
   end
 
-  def successor(number)
+  def action
+    if number == 0
+      'Go to the store and buy some more, '
+    else
+      "Take #{pronoun} down and pass it around, "
+    end
+  end
+
+  def pronoun
+    if number == 1
+      'it'
+    else
+      'one'
+    end
+  end
+
+  def successor
     if number == 0
       99
     else
