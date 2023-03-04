@@ -1,12 +1,4 @@
 class Bottles
-  def bottle_number_for(number)
-    if number == 0
-      BottleNumber0
-    else
-      BottleNumber
-    end.new(number)
-  end
-
   def song
     verses(99, 0)
   end
@@ -24,6 +16,17 @@ class Bottles
       "#{bottle_number.action}" +
       "#{next_bottle_number} of beer on the wall.\n"
   end
+
+  def bottle_number_for(number)
+    case number
+    when 0
+      BottleNumber0
+    when 1
+      BottleNumber1
+    else
+      BottleNumber
+    end.new(number)
+  end
 end
 
 class BottleNumber
@@ -37,46 +40,30 @@ class BottleNumber
     "#{quantity} #{container}"
   end
 
-  def action
-    "Take #{pronoun} down and pass it around, "
-  end
-
   def quantity
     number.to_s
   end
 
   def container
-    if number == 1
-      'bottle'
-    else
-      'bottles'
-    end
+    'bottles'
+  end
+
+  def action
+    "Take #{pronoun} down and pass it around, "
+  end
+
+  def pronoun
+    'one'
   end
 
   def successor
     number - 1
   end
-
-  def pronoun
-    if number == 1
-      'it'
-    else
-      'one'
-    end
-  end
-
-  def successor
-    if number == 0
-      99
-    else
-      number - 1
-    end
-  end
 end
 
 class BottleNumber0 < BottleNumber
   def quantity
-    "no more"
+    'no more'
   end
 
   def action
@@ -85,5 +72,15 @@ class BottleNumber0 < BottleNumber
 
   def successor
     99
+  end
+end
+
+class BottleNumber1 < BottleNumber
+  def container
+    'bottle'
+  end
+
+  def pronoun
+    'it'
   end
 end
