@@ -1,4 +1,12 @@
 class Bottles
+  def bottle_number_for(number)
+    if number == 0
+      BottleNumber0.new(number)
+    else
+      BottleNumber.new(number)
+    end
+  end
+
   def song
     verses(99, 0)
   end
@@ -8,9 +16,8 @@ class Bottles
   end
 
   def verse(number)
-    bottle_number = (number == 0 ? BottleNumber0 : BottleNumber).new(number)
-    succ = bottle_number.successor
-    next_bottle_number =(succ == 0 ? BottleNumber0 : BottleNumber).new(succ)
+    bottle_number = bottle_number_for(number)
+    next_bottle_number = bottle_number_for(bottle_number.successor)
 
     "#{bottle_number} of beer on the wall, ".capitalize +
       "#{bottle_number} of beer.\n" +
