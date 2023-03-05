@@ -1,4 +1,4 @@
-class Friend
+class FriendWithPet
   def playdate_time_limit
     pet.durability_of_preferred_toy
   end
@@ -16,8 +16,18 @@ class Toy
   end
 end
 
-# Foo now asks for what it wants instead of making assumptions about
-# it's collaborators' collaborators
+class FriendWithChild
+  def playdate_time_limit
+    child.tolerance_for_social_contact
+  end
+end
+
+class Child
+  def tolerance_for_social_contact
+    1800
+  end
+end
+
 class Foo
   def playdate_time_limit
     best_friend.playdate_time_limit
