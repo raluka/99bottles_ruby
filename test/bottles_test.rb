@@ -3,16 +3,19 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/bottles'
 
-class BottlesTest < Minitest::Test
+class BottleVerseTest < Minitest::Test
   def test_the_first_verse
     expected =
       '99 bottles of beer on the wall, ' +
-      "99 bottles of beer.\n" +
-      'Take one down and pass it around, ' +
-      "98 bottles of beer on the wall.\n"
-    assert_equal expected, Bottles.new.verse(99)
+        "99 bottles of beer.\n" +
+        'Take one down and pass it around, ' +
+        "98 bottles of beer on the wall.\n"
+    assert_equal expected, BottleVerse.lyrics(99)
   end
 
+end
+
+class BottlesTest < Minitest::Test
   def test_another_verse
     expected =
       '3 bottles of beer on the wall, ' +
@@ -387,3 +390,18 @@ class BottlesTest < Minitest::Test
     assert_equal expected, Bottles.new.song
   end
 end
+
+class BottleNumberTest < Minitest::Test
+  def test_returns_correct_class_for_given_number
+    # 0, 1, and 6 are special
+    assert_equal BottleNumber0, BottleNumber.for(0).class
+    assert_equal BottleNumber1, BottleNumber.for(1).class
+    assert_equal BottleNumber6, BottleNumber.for(6).class
+
+    # other numbers get the default
+    assert_equal BottleNumber, BottleNumber.for(7).class
+    assert_equal BottleNumber, BottleNumber.for(13).class
+    assert_equal BottleNumber, BottleNumber.for(42).class
+  end
+end
+
