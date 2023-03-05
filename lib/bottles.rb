@@ -4,12 +4,13 @@ class Bottles
   def initialize(verse_template: BottleVerse)
     @verse_template = verse_template
   end
+
   def song
-    verses(99,0)
+    verses(99, 0)
   end
 
   def verses(upper, lower)
-    upper.downto(lower).collect {|i| verse(i)}.join("\n")
+    upper.downto(lower).collect { |i| verse(i) }.join("\n")
   end
 
   def verse(number)
@@ -37,18 +38,19 @@ end
 class BottleNumber
   def self.for(number)
     case number
-      when 0
-        BottleNumber0
-      when 1
-        BottleNumber1
-      when 6
-        BottleNumber6
-      else
-        BottleNumber
+    when 0
+      BottleNumber0
+    when 1
+      BottleNumber1
+    when 6
+      BottleNumber6
+    else
+      BottleNumber
     end.new(number)
   end
 
   attr_reader :number
+
   def initialize(number)
     @number = number
   end
@@ -62,7 +64,7 @@ class BottleNumber
   end
 
   def container
-    "bottles"
+    'bottles'
   end
 
   def action
@@ -70,7 +72,7 @@ class BottleNumber
   end
 
   def pronoun
-    "one"
+    'one'
   end
 
   def successor
@@ -80,11 +82,11 @@ end
 
 class BottleNumber0 < BottleNumber
   def quantity
-    "no more"
+    'no more'
   end
 
   def action
-    "Go to the store and buy some more"
+    'Go to the store and buy some more'
   end
 
   def successor
@@ -94,20 +96,20 @@ end
 
 class BottleNumber1 < BottleNumber
   def container
-    "bottle"
+    'bottle'
   end
 
   def pronoun
-    "it"
+    'it'
   end
 end
 
 class BottleNumber6 < BottleNumber
   def quantity
-    "1"
+    '1'
   end
 
   def container
-    "six-pack"
+    'six-pack'
   end
 end
