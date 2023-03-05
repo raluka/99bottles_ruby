@@ -20,12 +20,6 @@ class CountdownSong
   end
 end
 
-class VerseFake
-  def self.lyrics(number)
-    "This is verse #{number}.\n"
-  end
-end
-
 class BottleVerse
   def self.lyrics(number)
     new(BottleNumber.for(number)).lyrics
