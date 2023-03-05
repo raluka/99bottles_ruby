@@ -19,11 +19,7 @@ end
 
 class BottleNumber
   def self.for(number)
-    registry.find { |candidate| candidate.handles?(number)}.new(number)
-  end
-
-  def self.handles?(_number)
-    true
+    registry.find { |candidate| candidate.handles?(number) }.new(number)
   end
 
   def self.registry
@@ -36,6 +32,10 @@ class BottleNumber
 
   def self.inherited(candidate)
     register(candidate)
+  end
+
+  def self.handles?(_number)
+    true
   end
 
   attr_reader :number
