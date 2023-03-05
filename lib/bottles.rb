@@ -36,6 +36,10 @@ class BottleNumber
 
   BottleNumber.register(self)
 
+  def self.inherited(candidate)
+    register(candidate)
+  end
+
   attr_reader :number
 
   def initialize(number)
