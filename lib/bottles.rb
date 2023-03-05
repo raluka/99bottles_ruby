@@ -1,4 +1,9 @@
 class Bottles
+  attr_reader :verse_template
+
+  def initialize(verse_template: BottleVerse)
+    @verse_template = verse_template
+  end
   def song
     verses(99,0)
   end
@@ -8,7 +13,24 @@ class Bottles
   end
 
   def verse(number)
-    BottleVerse.new(number).lyrics
+    verse_template.new(number).lyrics
+  end
+end
+
+class BottleVerse
+  attr_reader :number
+
+  def initialize(number)
+    @number = number
+  end
+
+  def lyrics
+    bottle_number = BottleNumber.for(number)
+
+    "#{bottle_number} of beer on the wall, ".capitalize +
+      "#{bottle_number} of beer.\n" +
+      "#{bottle_number.action}, " +
+      "#{bottle_number.successor} of beer on the wall.\n"
   end
 end
 
@@ -87,22 +109,5 @@ class BottleNumber6 < BottleNumber
 
   def container
     "six-pack"
-  end
-end
-
-class BottleVerse
-  attr_reader :number
-
-  def initialize(number)
-    @number = number
-  end
-
-  def lyrics
-    bottle_number = BottleNumber.for(number)
-
-    "#{bottle_number} of beer on the wall, ".capitalize +
-      "#{bottle_number} of beer.\n" +
-      "#{bottle_number.action}, " +
-      "#{bottle_number.successor} of beer on the wall.\n"
   end
 end
