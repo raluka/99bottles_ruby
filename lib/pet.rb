@@ -1,5 +1,5 @@
 class Friend
-  def durability_of_preferred_toy_of_pet
+  def playdate_time_limit
     pet.durability_of_preferred_toy
   end
 end
@@ -16,9 +16,10 @@ class Toy
   end
 end
 
-# Foo now only sends messages to best_friend
+# Foo now asks for what it wants instead of making assumptions about
+# it's collaborators' collaborators
 class Foo
-  def durability_of_preferred_toy_of_best_friends_pet
-    best_friend.durability_of_preferred_toy_of_pet
+  def playdate_time_limit
+    best_friend.playdate_time_limit
   end
 end
